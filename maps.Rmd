@@ -3,13 +3,13 @@ title: "maps"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## R Markdown
 
-```{r cars}
+```{r cars, include = FALSE}
 library(tidycensus)
 library(tidyverse)
 
@@ -19,33 +19,25 @@ racevars <- c(White = "B02001_002",
               Black = "B02001_003", 
               Asian = "B02001_005",
               Hispanic = "B03003_003")
-harris <- get_acs(geography = "tract",
+somerset <- get_acs(geography = "tract",
                   variables = racevars, 
                   year = 2018,
-                  state = "TX",
-                  county = "Harris County",
+                  state = "NJ",
+                  county = "Somerset",
                   geometry = TRUE,
                   summary_var = "B02001_001") 
-
-harris %>%
+```
+```{r somerset, echo = FALSE}
+somerset %>%
   mutate(Percent = 100 * (estimate / summary_est)) %>%
   ggplot(aes(fill = Percent, color = Percent)) +
   facet_wrap(~ variable) +
   geom_sf() +
   scale_fill_viridis_c(direction = -1) +
   scale_color_viridis_c(direction = -1) +
-  labs(title = "Racial geography of Harris County, Texas",
+  labs(title = "Racial geography of Somerset County, New Jersey",
        caption = "Source: American Community Survey 2014-2018") +
   theme_void()
 
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
